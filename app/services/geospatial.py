@@ -1,7 +1,6 @@
 """Geospatial data reading, feature extraction, and measurement services."""
 
 import datetime
-import os
 import tempfile
 import uuid
 import zipfile
@@ -14,7 +13,8 @@ import pandas as pd
 import pyogrio
 import pyproj
 import shapely.geometry
-import shapely.ops
+import shapely
+from shapely import transform as shapely_transform
 from pyogrio.errors import (
     CRSError,
     DataLayerError,
@@ -348,7 +348,10 @@ def measure_geometry(geom: Any, source_crs: Any) -> dict[str, Any]:
         # Transform to EPSG:4326 if necessary to find longitude/latitude for UTM zone selection
         if src_crs_obj.to_epsg() != 4326:
             to_wgs84 = pyproj.Transformer.from_crs(src_crs_obj, "EPSG:4326", always_xy=True)
-            geom_wgs84 = shapely.ops.transform(to_wgs84.transform, geom)
+            def _fwd(coords):
+                x, y = to_wgs84.transform(coords[:, 0], coords[:, 1])
+                return np.column_stack([x, y])
+            geom_wgs84 = shapely_transform(geom, _fwd)
         else:
             geom_wgs84 = geom
 
@@ -357,7 +360,10 @@ def measure_geometry(geom: Any, source_crs: Any) -> dict[str, Any]:
 
         # Transform original geometry to projected UTM CRS (in metres)
         to_utm = pyproj.Transformer.from_crs(src_crs_obj, utm_crs, always_xy=True)
-        projected_geom = shapely.ops.transform(to_utm.transform, geom)
+        def _to_m(coords):
+            x, y = to_utm.transform(coords[:, 0], coords[:, 1])
+            return np.column_stack([x, y])
+        projected_geom = shapely_transform(geom, _to_m)
 
         repaired_note: str | None = None
         if geom_type in ("Polygon", "MultiPolygon") and not projected_geom.is_valid:

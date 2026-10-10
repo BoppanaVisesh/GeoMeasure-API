@@ -6,7 +6,6 @@ import uuid
 from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, Query, UploadFile, status
-from fastapi.responses import JSONResponse
 
 from app.schemas import (
     ErrorResponse,
@@ -96,7 +95,7 @@ async def upload_file(file: UploadFile) -> FileInfo:
     except UnsupportedFileTypeError as exc:
         raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail=str(exc)) from exc
     except MissingCRSError as exc:
-        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc)) from exc
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
     except InvalidFileError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
     except GeoMeasureError as exc:

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="root_doc">
+    <Schema id="sample" name="sample">
+      <SimpleField name="type" type="string"/>
+    </Schema>
+    <Schema id="sample.schema">
+      <SimpleField name="type" type="string"/>
+      <SimpleField name="descr" type="string"/>
+    </Schema>
+    <Schema id="sample.schema">
+      <SimpleField name="type" type="string"/>
+      <SimpleField name="descr" type="string"/>
+    </Schema>
+    <Document id="sample">
+      <name>sample</name>
+      <Placemark id="sample.1">
+        <name>Hyderabad Zone A</name>
+        <ExtendedData>
+          <SchemaData schemaUrl="#sample.schema">
+            <SimpleData name="type">polygon</SimpleData>
+            <SimpleData name="descr">~500m x 500m zone near Hyderabad</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>
+                78.47,17.38,0
+                78.4747023235838,17.3800595392202,0
+                78.474640364847,17.3845747287598,0
+                78.4699379261905,17.3845151731161,0
+                78.47,17.38,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark id="sample.2">
+        <name>Hyderabad Road</name>
+        <ExtendedData>
+          <SchemaData schemaUrl="#sample.schema">
+            <SimpleData name="type">linestring</SimpleData>
+            <SimpleData name="descr">~1 km road segment near Hyderabad</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <LineString>
+          <coordinates>
+            78.4700248242963,17.3781939301226,0
+            78.4794293980588,17.3783128849397,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark id="sample.3">
+        <name>Hyderabad POI</name>
+        <ExtendedData>
+          <SchemaData schemaUrl="#sample.schema">
+            <SimpleData name="type">point</SimpleData>
+            <SimpleData name="descr">Point of interest near Hyderabad</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            78.4723201536553,17.3822873743696,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Document>
+  </Document>
+</kml>
